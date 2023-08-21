@@ -1,4 +1,5 @@
-import { createRouter, createWebHashHistory } from 'vue-router';
+import { createRouter, createWebHistory } from 'vue-router';
+// 上方加载动画库
 import NProgress from 'nprogress';
 import 'nprogress/nprogress.css';
 import pinia from '/@/stores/index';
@@ -31,7 +32,7 @@ const { isRequestRoutes } = themeConfig.value;
  * @link 参考：https://next.router.vuejs.org/zh/api/#createrouter
  */
 export const router = createRouter({
-	history: createWebHashHistory(),
+	history: createWebHistory(),
 	routes: staticRoutes,
 });
 
@@ -85,6 +86,10 @@ export function formatTwoStageRoutes(arr: any) {
 }
 
 // 路由加载前
+// 加载动画
+// 判断权限
+// 完成重定向
+// 加载前后端路由
 router.beforeEach(async (to, from, next) => {
 	NProgress.configure({ showSpinner: false });
 	if (to.meta.title) NProgress.start();
@@ -93,16 +98,19 @@ router.beforeEach(async (to, from, next) => {
 		next();
 		NProgress.done();
 	} else {
+		// 记录重定向信息
 		if (!token) {
 			next(`/login?redirect=${to.path}&params=${JSON.stringify(to.query ? to.query : to.params)}`);
 			Session.clear();
 			NProgress.done();
+			// 无法在登录的状态下返回登录页面
 		} else if (token && to.path === '/login') {
 			next('/home');
 			NProgress.done();
 		} else {
 			const storesRoutesList = useRoutesList(pinia);
 			const { routesList } = storeToRefs(storesRoutesList);
+			// 判断routesList中是否有路由，如果已经有就不需要重复请求，并且解决刷新丢失的问题
 			if (routesList.value.length === 0) {
 				if (isRequestRoutes) {
 					// 后端控制路由：路由数据初始化，防止刷新时丢失

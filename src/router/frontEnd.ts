@@ -63,6 +63,7 @@ export async function frontEndsResetRoute() {
  * @returns 返回替换后的路由数组
  */
 export function setFilterRouteEnd() {
+	// dynamicRoutes[0].children?.push(...demoRoutes);
 	let filterRouteEnd: any = formatTwoStageRoutes(formatFlatteningRoutes(dynamicRoutes));
 	filterRouteEnd[0].children = [...setFilterRoute(filterRouteEnd[0].children), ...notFoundAndNoPower];
 	return filterRouteEnd;
@@ -76,8 +77,10 @@ export function setFilterRouteEnd() {
  * @returns 返回有当前用户权限标识的路由数组
  */
 export function setFilterRoute(chil: any) {
+	console.log('chil===>>>', chil);
 	const stores = useUserInfo(pinia);
 	const { userInfos } = storeToRefs(stores);
+	console.log('userInfos===>>>', userInfos.value);
 	let filterRoute: any = [];
 	chil.forEach((route: any) => {
 		if (route.meta.roles) {

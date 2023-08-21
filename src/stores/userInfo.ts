@@ -10,15 +10,15 @@ import { Session } from '/@/utils/storage';
 export const useUserInfo = defineStore('userInfo', {
 	state: (): UserInfosStates => ({
 		userInfos: {
-			id:0,
+			id: 0,
 			userName: '',
-			userNickname:'',
+			userNickname: '',
 			avatar: '',
 			roles: [],
 			time: 0,
-			authBtnList:[],
+			authBtnList: [],
 		},
-		permissions:[],
+		permissions: [],
 	}),
 	actions: {
 		async setUserInfos() {
@@ -45,9 +45,9 @@ export const useUserInfo = defineStore('userInfo', {
 			}
 			// 用户信息模拟数据
 			const userInfos = {
-				id:0,
+				id: 0,
 				userName: userName,
-				userNickname: "",
+				userNickname: '',
 				avatar:
 					userName === 'admin'
 						? 'https://ss0.bdstatic.com/70cFvHSh_Q1YnxGkpoWK1HF6hhy/it/u=1813762643,1914315241&fm=26&gp=0.jpg'
@@ -57,13 +57,14 @@ export const useUserInfo = defineStore('userInfo', {
 				authBtnList: defaultAuthBtnList,
 			};
 			if (Session.get('userInfo')) {
+				console.log('userInfo', Session.get('userInfo'));
 				this.userInfos = Session.get('userInfo');
 			} else {
 				this.userInfos = userInfos;
 			}
 		},
 		async setPermissions() {
-			this.permissions = Session.get('permissions')
+			this.permissions = Session.get('permissions');
 		},
 	},
 });
